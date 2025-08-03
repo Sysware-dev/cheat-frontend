@@ -16,7 +16,7 @@
   <script>
     const supabaseUrl = 'https://dlzpktmtxcbknpulwnzp.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsenBrdG10eGNia25wdWx3bnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNzgyNjEsImV4cCI6MjA2OTc1NDI2MX0.0paajBHMgqsZHEfufMglEtyqGMDaJBDx2YBfvsR2p-M';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     const ADMIN_TOKEN = 'YOUR_ADMIN_TOKEN'; // Replace with JWT from approve-order function
 
     async function loadOrders() {
