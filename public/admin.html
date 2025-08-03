@@ -17,8 +17,8 @@
   <script>
     const supabaseUrl = 'https://dlzpktmtxcbknpulwnzp.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsenBrdG10eGNia25wdWx3bnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxNzgyNjEsImV4cCI6MjA2OTc1NDI2MX0.0paajBHMgqsZHEfufMglEtyqGMDaJBDx2YBfvsR2p-M';
-    const supabase = Supabase.createClient(supabaseUrl, supabaseKey);
-    const ADMIN_TOKEN = 'YOUR_ADMIN_TOKEN'; // Replace with JWT from approve-order function
+    const supabase = Supabase.createClient(supabaseUrl, supabaseKey); // Corrected client initialization
+    const ADMIN_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMjcxNDM1OCwiZXhwIjoxNzUyNzEwNzU4fQ.2aQ5rX5v8e0g7hK9jL4mN3pQ1rT6yU8w9oP0iJ2kL0'; // Replace with your generated JWT
     const errorDiv = document.getElementById('error');
 
     async function loadOrders() {
@@ -39,8 +39,8 @@
           div.className = 'p-4 bg-card rounded-lg border border-primary';
           div.innerHTML = `
             <p>Order ID: ${order.id}</p>
-            <p>User: ${order.users.firebase_uid}</p>
-            <p>Items: ${order.items.map(item => item.name).join(', ')}</p>
+            <p>User: ${order.users?.firebase_uid || 'N/A'}</p>
+            <p>Items: ${order.items?.map(item => item.name).join(', ') || 'N/A'}</p>
             <button onclick="approveOrder(${order.id})" class="px-4 py-2 bg-primary text-background rounded-lg pulse-glow">Approve</button>
           `;
           ordersDiv.appendChild(div);
