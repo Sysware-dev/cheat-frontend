@@ -84,7 +84,7 @@ function App() {
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
-      alert('Signup successful! Please check your email for verification.');
+      alert('Signup successful! Please check your email for verification.\n\n⚠️ ATTENTION: Check your Gmail spam folder if you don\'t see the email!');
     } catch (error) {
       alert('Signup failed: ' + error.message);
       setError('Signup failed: ' + error.message);
@@ -97,7 +97,7 @@ function App() {
         redirectTo: `${window.location.origin}/reset-password`,
       });
       if (error) throw error;
-      setResetMessage('Password reset email sent! Please check your inbox.');
+      setResetMessage('Password reset email sent! Please check your inbox.\n\n⚠️ ATTENTION: Check your Gmail spam folder if you don\'t see the email!');
       setShowForgotPassword(false);
       setResetEmail('');
     } catch (error) {
