@@ -43,6 +43,7 @@ function App() {
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
+        ensureUserExists(session.user);
         fetchOrders(session.user.id);
       } else {
         setOrders([]);
@@ -51,6 +52,35 @@ function App() {
 
     return () => authListener.subscription.unsubscribe();
   }, []);
+
+  const ensureUserExists = async (user) => {
+    try {
+      // Check if user exists in our users table
+      const { data: existingUser, error: checkError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+
+      if (checkError && checkError.code === 'PGRST116') {
+        // User doesn't exist, create them
+        const { error: insertError } = await supabase
+          .from('users')
+          .insert([{ id: user.id, firebase_uid: user.id }]);
+        
+        if (insertError) {
+          console.error('Error creating user:', insertError);
+          setError('Error creating user profile: ' + insertError.message);
+        }
+      } else if (checkError) {
+        console.error('Error checking user:', checkError);
+        setError('Error checking user profile: ' + checkError.message);
+      }
+    } catch (err) {
+      console.error('Unexpected error ensuring user exists:', err);
+      setError('Unexpected error creating user profile');
+    }
+  };
 
   const fetchOrders = async (userId) => {
     try {
