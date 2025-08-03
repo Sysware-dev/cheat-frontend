@@ -224,9 +224,7 @@ function App() {
             className="ml-2 text-white hover:text-gray-200"
           >
             ×
-          )}
-        </div>
-      </nav>
+          </button>
         </div>
       )}
 
