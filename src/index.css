@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-inter bg-background text-text;
+}
+
+h1, h2, h3 {
+  @apply font-orbitron;
+}
+
+button {
+  @apply transition-all duration-300 hover:bg-secondary hover:shadow-lg;
+}
