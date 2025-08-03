@@ -16,6 +16,9 @@ function App() {
   const [password, setPassword] = useState('');
   const [view, setView] = useState('store');
   const [error, setError] = useState(null);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetMessage, setResetMessage] = useState('');
 
   useEffect(() => {
     // Fetch cheats from Supabase
@@ -88,6 +91,20 @@ function App() {
     }
   };
 
+  const handleForgotPassword = async () => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setResetMessage('Password reset email sent! Please check your inbox.');
+      setShowForgotPassword(false);
+      setResetEmail('');
+    } catch (error) {
+      setError('Password reset failed: ' + error.message);
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
@@ -137,7 +154,7 @@ function App() {
               </button>
             </>
           ) : (
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               <input
                 type="email"
                 value={email}
@@ -158,10 +175,60 @@ function App() {
               <button onClick={handleSignup} className="px-6 py-2 bg-primary text-background rounded-lg pulse-glow">
                 Signup
               </button>
+              <button 
+                onClick={() => setShowForgotPassword(true)} 
+                className="text-primary hover:text-secondary underline text-sm"
+              >
+                Forgot Password?
+              </button>
             </div>
           )}
         </div>
       </nav>
+
+      {showForgotPassword && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-card p-6 rounded-lg border border-primary max-w-md w-full mx-4">
+            <h2 className="text-xl font-bold text-primary mb-4">Reset Password</h2>
+            <input
+              type="email"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full p-2 bg-background text-text rounded-lg border border-primary focus:outline-none focus:ring-2 focus:ring-primary mb-4"
+            />
+            <div className="flex gap-2">
+              <button onClick={handleForgotPassword} className="px-4 py-2 bg-primary text-background rounded-lg pulse-glow">
+                Send Reset Email
+              </button>
+              <button 
+                onClick={() => {
+                  setShowForgotPassword(false);
+                  setResetEmail('');
+                  setError(null);
+                }} 
+                className="px-4 py-2 bg-secondary text-background rounded-lg pulse-glow"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {resetMessage && (
+        <div className="mb-4 p-4 bg-green-600 text-white rounded-lg">
+          {resetMessage}
+          <button 
+            onClick={() => setResetMessage('')} 
+            className="ml-2 text-white hover:text-gray-200"
+          >
+            ×
+          )}
+        </div>
+      </nav>
+        </div>
+      )}
 
       {view === 'store' && (
         <div>
